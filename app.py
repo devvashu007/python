@@ -4,7 +4,23 @@ app = Flask(__name__)
 
 @app.route('/')
 def index():
-    return render_template("template/index.html")
+    return '''<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Flask App</title>
+</head>
+<body>
+    <h1>Welcome to the Flask App</h1>
+    <p>Use the following endpoints to test:</p>
+    <ul>
+        <li><a href="/translate">Translate Text</a></li>
+        <li><a href="/tts">Text-to-Speech</a></li>
+    </ul>
+</body>
+</html>
+'''
 @app.route("/translate")
 def translate_text():
     import requests
@@ -52,7 +68,52 @@ def text_to_speech():
 
     response = requests.request("POST", url, json=payload, headers=headers)
 
-    return response.json()
+    return '''<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Text-to-Speech Audio Playback</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #f0f0f0;
+            margin: 0;
+        }
+        .container {
+            text-align: center;
+        }
+        button {
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Text-to-Speech Audio Playback</h1>
+        <audio id="audio-player" controls>
+            Your browser does not support the audio element.
+        </audio>
+        <br>
+        <button onclick="playAudio()">Play Audio</button>
+    </div>
+
+    <script>
+        function playAudio() {
+            const audioPlayer = document.getElementById('audio-player');
+            audioPlayer.src = '/get-audio';
+            audioPlayer.play();
+        }
+    </script>
+</body>
+</html>
+'''
     
 
 if __name__ == '__main__':
